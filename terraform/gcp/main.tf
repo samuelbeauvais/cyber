@@ -59,12 +59,15 @@ resource "google_artifact_registry_repository" "app" {
 resource "docker_image" "app" {
   name = "${var.region}-docker.pkg.dev/${var.project_id}/${var.service_name}/${var.service_name}:${var.docker_image_tag}"
 
-  build {
-    context    = "${path.module}/../.."
-    dockerfile = "Dockerfile"
-    platform   = "linux/amd64"
-    no_cache   = true
-  }
+build {
+  context    = "${path.module}/../.."
+  dockerfile = "${path.module}/../../Dockerfile"
+  platform   = "linux/amd64"
+  no_cache   = true
+  builder    = "default"
+}
+
+
 
   depends_on = [
     google_project_service.cloudbuild,
