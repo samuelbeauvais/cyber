@@ -57,6 +57,7 @@ resource "azurerm_container_registry" "acr" {
 
 # Configure Docker provider to use ACR
 provider "docker" {
+  context = "desktop-linux"
   registry_auth {
     address  = azurerm_container_registry.acr.login_server
     username = azurerm_container_registry.acr.admin_username
@@ -70,9 +71,10 @@ resource "docker_image" "app" {
   
   build {
     context    = "${path.module}/../.."
-    dockerfile = "Dockerfile"
+    dockerfile = "${path.module}/../../Dockerfile"
     platform   = "linux/amd64"
     no_cache   = true
+    builder    = "default"
   }
 }
 
